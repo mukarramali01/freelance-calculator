@@ -5,308 +5,540 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Freelance Calculator</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f0f0f;
-      color: #e8e8e8;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #080810;
+      color: #e8e8f0;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 32px 16px;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(168,85,247,0.08) 0%, transparent 50%);
     }
 
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 16px;
-      padding: 36px;
+    .container {
       width: 100%;
-      max-width: 440px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      max-width: 480px;
     }
 
-    h1 {
-      font-size: 18px;
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(20px);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 10px;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6366f1;
+      margin-bottom: 16px;
+    }
+
+    /* Inputs */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .input-row .sep {
+      color: #4b5563;
+      font-size: 18px;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    .field {
+      flex: 1;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .field .prefix {
+      position: absolute;
+      left: 12px;
+      bottom: 11px;
+      font-size: 13px;
+      color: #6b7280;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .field input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
       color: #fff;
-      margin-bottom: 28px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 10px 12px 10px 28px;
+      outline: none;
+      transition: all 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    .field input.no-prefix {
+      padding-left: 12px;
+    }
+
+    .field input::-webkit-outer-spin-button,
+    .field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .field input:focus {
+      border-color: rgba(99,102,241,0.5);
+      background: rgba(99,102,241,0.08);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+
+    .field input.active-source {
+      border-color: rgba(99,102,241,0.6);
+      background: rgba(99,102,241,0.1);
+    }
+
+    .field input.inactive-source {
+      opacity: 0.4;
+    }
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0 14px;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .project-field .field input {
+      font-size: 20px;
+      padding: 12px 12px 12px 30px;
+    }
+
+    .project-field .field .prefix {
+      font-size: 15px;
+      bottom: 13px;
+    }
+
+    /* Breakdown */
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .breakdown-row .lbl {
+      font-size: 14px;
+      color: #9ca3af;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .input-group {
-      margin-bottom: 28px;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #888;
-      margin-bottom: 8px;
-    }
-
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-wrap span {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #666;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    input[type="number"] {
-      width: 100%;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 22px;
+    .breakdown-row .lbl .pct {
+      background: rgba(255,255,255,0.06);
+      color: #6b7280;
+      font-size: 10px;
       font-weight: 600;
-      padding: 12px 14px 12px 30px;
-      outline: none;
-      transition: border-color 0.2s;
-      -moz-appearance: textfield;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
     }
 
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
-
-    input[type="number"]:focus {
-      border-color: #555;
-    }
-
-    .breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 11px 0;
-    }
-
-    .row .label {
+    .breakdown-row .val {
       font-size: 14px;
-      color: #aaa;
+      font-weight: 600;
+      color: #e5e7eb;
+      transition: all 0.3s;
     }
 
-    .row .label .badge {
-      display: inline-block;
-      background: #2a2a2a;
-      color: #888;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-    }
+    .breakdown-row .val.red { color: #f87171; }
+    .breakdown-row .val.dim { color: #6b7280; }
 
-    .row .value {
-      font-size: 14px;
-      font-weight: 500;
-      color: #e8e8e8;
-    }
-
-    .row .value.deduction {
-      color: #ff6b6b;
-    }
-
-    .divider {
+    .sep-line {
       height: 1px;
-      background: #2a2a2a;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
       margin: 4px 0;
     }
 
+    /* Rate row */
     .rate-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 0 10px;
+      padding: 10px 0;
     }
 
-    .rate-row .label {
+    .rate-row .lbl {
       font-size: 13px;
-      color: #888;
+      color: #6b7280;
     }
 
-    .rate-input-wrap {
+    .rate-input {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: #111;
-      border: 1px solid #333;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 8px;
       padding: 5px 10px;
+      transition: all 0.2s;
     }
 
-    .rate-input-wrap span {
-      font-size: 12px;
-      color: #666;
+    .rate-input:focus-within {
+      border-color: rgba(99,102,241,0.4);
+      background: rgba(99,102,241,0.06);
     }
 
-    .rate-input-wrap input {
+    .rate-input input {
       width: 52px;
       background: transparent;
       border: none;
       color: #fff;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
       padding: 0;
       text-align: right;
       outline: none;
       -moz-appearance: textfield;
     }
 
-    .rate-input-wrap input::-webkit-outer-spin-button,
-    .rate-input-wrap input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
+    .rate-input input::-webkit-outer-spin-button,
+    .rate-input input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-    .result-usd {
+    .rate-input span { font-size: 11px; color: #4b5563; }
+
+    /* Results */
+    .result-main {
+      background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.1) 100%);
+      border: 1px solid rgba(99,102,241,0.25);
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 13px 0 10px;
+      margin-bottom: 8px;
     }
 
-    .result-usd .label {
-      font-size: 15px;
+    .result-main .lbl {
+      font-size: 13px;
       font-weight: 600;
-      color: #fff;
+      color: #a5b4fc;
     }
 
-    .result-usd .value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #4ade80;
+    .result-main .val {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s;
     }
 
-    .result-inr {
+    .result-secondary {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1f2b1f;
-      border: 1px solid #2d3d2d;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top: 4px;
+      gap: 8px;
     }
 
-    .result-inr .label {
-      font-size: 14px;
-      color: #7db87d;
+    .result-box {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s;
     }
 
-    .result-inr .value {
-      font-size: 20px;
+    .result-box .lbl {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .result-box .val {
+      font-size: 18px;
       font-weight: 700;
-      color: #4ade80;
+      color: #34d399;
+      transition: all 0.3s;
     }
+
+    .result-box.inr { border-color: rgba(52,211,153,0.15); }
+    .result-box.aed { border-color: rgba(251,191,36,0.15); }
+    .result-box.aed .val { color: #fbbf24; }
+
+    /* Animated number change */
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
+    .pop { animation: pop 0.2s ease; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>💰 Freelance Calculator</h1>
+  <div class="container">
 
-    <div class="input-group">
-      <label>Project Amount</label>
-      <div class="input-wrap">
-        <span>$</span>
-        <input type="number" id="amount" placeholder="0" min="0" step="any" />
+    <div class="header">
+      <h1>Freelance Calculator</h1>
+      <p>Upwork fees, agency cut & currency conversion</p>
+    </div>
+
+    <!-- Input Card -->
+    <div class="card">
+      <div class="card-title">Hourly</div>
+      <div class="input-row">
+        <div class="field">
+          <label>Hours</label>
+          <input type="number" id="hours" placeholder="0" min="0" step="any" class="no-prefix" />
+        </div>
+        <div class="sep">×</div>
+        <div class="field">
+          <label>Rate / hr</label>
+          <span class="prefix">$</span>
+          <input type="number" id="rate-hr" value="20" min="0" step="any" />
+        </div>
+      </div>
+
+      <div class="or-divider">or</div>
+
+      <div class="project-field">
+        <div class="field">
+          <label>Fixed Project Amount</label>
+          <span class="prefix">$</span>
+          <input type="number" id="amount" placeholder="0" min="0" step="any" />
+        </div>
       </div>
     </div>
 
-    <div class="breakdown">
+    <!-- Breakdown Card -->
+    <div class="card">
+      <div class="card-title">Breakdown</div>
 
-      <div class="row">
-        <span class="label">Gross Amount</span>
-        <span class="value" id="gross">$0.00</span>
+      <div class="breakdown-row">
+        <span class="lbl">Gross Amount</span>
+        <span class="val" id="gross">$0.00</span>
       </div>
 
-      <div class="row">
-        <span class="label">Upwork Fees & Tax <span class="badge">11%</span></span>
-        <span class="value deduction" id="upwork-fee">-$0.00</span>
+      <div class="breakdown-row">
+        <span class="lbl">Upwork Fees & Tax <span class="pct">11%</span></span>
+        <span class="val red" id="upwork-fee">-$0.00</span>
       </div>
 
-      <div class="divider"></div>
+      <div class="sep-line"></div>
 
-      <div class="row">
-        <span class="label">After Upwork</span>
-        <span class="value" id="after-upwork">$0.00</span>
+      <div class="breakdown-row">
+        <span class="lbl">After Upwork</span>
+        <span class="val dim" id="after-upwork">$0.00</span>
       </div>
 
-      <div class="row">
-        <span class="label">Agency Fees <span class="badge">25%</span></span>
-        <span class="value deduction" id="agency-fee">-$0.00</span>
+      <div class="breakdown-row">
+        <span class="lbl">Agency Fees <span class="pct">25%</span></span>
+        <span class="val red" id="agency-fee">-$0.00</span>
       </div>
 
-      <div class="divider"></div>
+      <div class="sep-line"></div>
 
       <div class="rate-row">
-        <span class="label">USD → INR Rate</span>
-        <div class="rate-input-wrap">
-          <input type="number" id="rate" value="90" min="1" step="any" />
+        <span class="lbl">USD → INR</span>
+        <div class="rate-input">
+          <input type="number" id="inr-rate" value="90" min="1" step="any" />
           <span>₹ / $</span>
         </div>
       </div>
 
-      <div class="result-usd">
-        <span class="label">💵 You Receive (USD)</span>
-        <span class="value" id="final-usd">$0.00</span>
+      <div class="rate-row">
+        <span class="lbl">USD → AED</span>
+        <div class="rate-input">
+          <input type="number" id="aed-rate" value="3.67" min="1" step="any" />
+          <span>AED / $</span>
+        </div>
       </div>
-
-      <div class="result-inr">
-        <span class="label">🇮🇳 You Receive (INR)</span>
-        <span class="value" id="final-inr">₹0</span>
-      </div>
-
     </div>
+
+    <!-- Results -->
+    <div class="result-main">
+      <span class="lbl">Total Amount Earned</span>
+      <span class="val" id="final-usd">$0.00</span>
+    </div>
+
+    <div class="result-secondary">
+      <div class="result-box inr">
+        <div class="lbl">Indian Rupee</div>
+        <div class="val" id="final-inr">₹0</div>
+      </div>
+      <div class="result-box aed">
+        <div class="lbl">UAE Dirham</div>
+        <div class="val" id="final-aed">AED 0</div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    const amountInput = document.getElementById('amount');
-    const rateInput   = document.getElementById('rate');
+    const hoursEl   = document.getElementById('hours');
+    const rateHrEl  = document.getElementById('rate-hr');
+    const amountEl  = document.getElementById('amount');
+    const inrRateEl = document.getElementById('inr-rate');
+    const aedRateEl = document.getElementById('aed-rate');
+
+    let lastSource = null; // 'hourly' or 'fixed'
 
     function fmt(n) {
       return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    function animatePop(el) {
+      el.classList.remove('pop');
+      void el.offsetWidth;
+      el.classList.add('pop');
+    }
+
     function calc() {
-      const gross = parseFloat(amountInput.value) || 0;
-      const rate  = parseFloat(rateInput.value)   || 90;
+      let gross = 0;
+
+      if (lastSource === 'hourly') {
+        const h = parseFloat(hoursEl.value) || 0;
+        const r = parseFloat(rateHrEl.value) || 0;
+        gross = h * r;
+        amountEl.value = gross > 0 ? gross.toFixed(2) : '';
+      } else if (lastSource === 'fixed') {
+        gross = parseFloat(amountEl.value) || 0;
+      } else {
+        // nothing typed yet
+        const h = parseFloat(hoursEl.value) || 0;
+        const r = parseFloat(rateHrEl.value) || 0;
+        const a = parseFloat(amountEl.value) || 0;
+        gross = h && r ? h * r : a;
+      }
 
       const upworkFee   = gross * 0.11;
       const afterUpwork = gross - upworkFee;
       const agencyFee   = afterUpwork * 0.25;
       const finalUSD    = afterUpwork - agencyFee;
-      const finalINR    = finalUSD * rate;
+      const inrRate     = parseFloat(inrRateEl.value) || 90;
+      const aedRate     = parseFloat(aedRateEl.value) || 3.67;
+      const finalINR    = finalUSD * inrRate;
+      const finalAED    = finalUSD * aedRate;
 
-      document.getElementById('gross').textContent       = `$${fmt(gross)}`;
-      document.getElementById('upwork-fee').textContent  = `-$${fmt(upworkFee)}`;
-      document.getElementById('after-upwork').textContent = `$${fmt(afterUpwork)}`;
-      document.getElementById('agency-fee').textContent  = `-$${fmt(agencyFee)}`;
-      document.getElementById('final-usd').textContent   = `$${fmt(finalUSD)}`;
-      document.getElementById('final-inr').textContent   = `₹${Math.round(finalINR).toLocaleString('en-IN')}`;
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el.textContent !== val) { el.textContent = val; animatePop(el); }
+      };
+
+      set('gross',       `$${fmt(gross)}`);
+      set('upwork-fee',  `-$${fmt(upworkFee)}`);
+      set('after-upwork',`$${fmt(afterUpwork)}`);
+      set('agency-fee',  `-$${fmt(agencyFee)}`);
+      set('final-usd',   `$${fmt(finalUSD)}`);
+      set('final-inr',   `₹${Math.round(finalINR).toLocaleString('en-IN')}`);
+      set('final-aed',   `AED ${fmt(finalAED)}`);
     }
 
-    amountInput.addEventListener('input', calc);
-    rateInput.addEventListener('input', calc);
+    function updateSourceStyles() {
+      if (lastSource === 'hourly') {
+        hoursEl.classList.add('active-source');
+        rateHrEl.classList.add('active-source');
+        amountEl.classList.add('inactive-source');
+      } else if (lastSource === 'fixed') {
+        amountEl.classList.add('active-source');
+        hoursEl.classList.add('inactive-source');
+        rateHrEl.classList.add('inactive-source');
+      } else {
+        [hoursEl, rateHrEl, amountEl].forEach(el => {
+          el.classList.remove('active-source', 'inactive-source');
+        });
+      }
+    }
+
+    hoursEl.addEventListener('input', () => {
+      if (hoursEl.value) {
+        lastSource = 'hourly';
+      } else if (!amountEl.value) {
+        lastSource = null;
+      }
+      updateSourceStyles(); calc();
+    });
+
+    rateHrEl.addEventListener('input', () => {
+      if (hoursEl.value) lastSource = 'hourly';
+      updateSourceStyles(); calc();
+    });
+
+    amountEl.addEventListener('input', () => {
+      if (amountEl.value) {
+        lastSource = 'fixed';
+      } else if (!hoursEl.value) {
+        lastSource = null;
+      }
+      updateSourceStyles(); calc();
+    });
+
+    inrRateEl.addEventListener('input', calc);
+    aedRateEl.addEventListener('input', calc);
   </script>
 </body>
 </html>
